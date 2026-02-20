@@ -1,0 +1,297 @@
+
+
+# 🏠 House Price Prediction using Machine Learning
+
+## 📌 Project Overview
+
+This project predicts **house prices** based on multiple features such as area, bedrooms, bathrooms, location, condition, and more using **Machine Learning Regression models**.
+
+It includes:
+
+* Data analysis (EDA)
+* Feature preprocessing
+* Baseline and advanced models
+* Model evaluation
+* Model saving
+* Interactive Command Line Interface (CLI) for predictions
+
+The goal is to build an **end-user friendly system** where anyone can enter house details and get a predicted price.
+
+---
+
+## 🚀 Features
+
+✔ Data Cleaning & Preprocessing
+✔ Exploratory Data Analysis (EDA)
+✔ Linear Regression (Baseline Model)
+✔ Random Forest Regressor (Improved Model)
+✔ Performance Evaluation (MAE & RMSE)
+✔ Saved ML Pipeline
+✔ Interactive CLI Prediction Tool
+✔ Feature Importance Visualization
+✔ Metrics Export (JSON)
+
+---
+
+## 📊 Dataset Information
+
+The dataset contains the following features:
+
+| Feature   | Type        | Description         |
+| --------- | ----------- | ------------------- |
+| Area      | Numerical   | House area (sqft)   |
+| Bedrooms  | Numerical   | Number of bedrooms  |
+| Bathrooms | Numerical   | Number of bathrooms |
+| Floors    | Numerical   | Number of floors    |
+| YearBuilt | Numerical   | Construction year   |
+| Location  | Categorical | House location      |
+| Condition | Categorical | House condition     |
+| Garage    | Categorical | Garage availability |
+| Price     | Target      | House price         |
+
+---
+
+## 🛠️ Technologies Used
+
+* Python 3
+* Pandas
+* NumPy
+* Matplotlib
+* Seaborn
+* Scikit-learn
+* Joblib
+* Kaggle Notebook
+
+---
+
+## 📁 Project Structure
+
+```
+House-Price-Prediction/
+│
+├── data/
+│   └── house_data.csv
+│
+├── notebooks/
+│   └── training_notebook.ipynb
+│
+├── models/
+│   └── house_price_model.pkl
+│
+├── outputs/
+│   ├── metrics.json
+│   └── feature_importance.png
+│
+├── predict_house_price_cli.py
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## ⚙️ Installation
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/yourusername/house-price-prediction.git
+cd house-price-prediction
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 📈 Model Training
+
+Model training is performed inside the Kaggle notebook:
+
+```
+notebooks/training_notebook.ipynb
+```
+
+This notebook includes:
+
+* Data loading
+* EDA
+* Feature engineering
+* Model training
+* Evaluation
+* Saving model
+
+---
+
+## 📊 Model Evaluation
+
+We evaluate the models using:
+
+* MAE (Mean Absolute Error)
+* RMSE (Root Mean Squared Error)
+
+Example output:
+
+```json
+{
+  "LinearRegression": {
+    "MAE": 185000,
+    "RMSE": 245000
+  },
+  "RandomForest": {
+    "MAE": 92000,
+    "RMSE": 135000
+  }
+}
+```
+
+Saved in:
+
+```
+outputs/metrics.json
+```
+
+---
+
+## 📌 Feature Importance
+
+Random Forest feature importance is visualized and saved as:
+
+```
+outputs/feature_importance.png
+```
+
+This helps understand which features affect house price most.
+
+---
+
+## 💻 CLI Prediction Tool
+
+An interactive command-line tool is provided for end users.
+
+### Run the CLI Tool
+
+```bash
+python predict_house_price_cli.py
+```
+
+### Example Usage
+
+```
+🏠 House Price Prediction CLI
+
+Enter Area in square feet (e.g., 2500): 2500
+Enter Number of Bedrooms (e.g., 3): 3
+Enter Number of Bathrooms (e.g., 2): 2
+Enter Number of Floors (e.g., 2): 2
+Enter Year Built (e.g., 2015): 2015
+Enter Location (Urban, Suburban, Downtown, Rural): Urban
+Enter Condition (Excellent, Good, Fair, Poor): Good
+Enter Garage (Yes/No): Yes
+```
+
+### Output
+
+```
+Predicted House Price: $345,000
+Estimated Price Range: $310,500 - $379,500
+```
+
+---
+
+## 📦 Saved Model
+
+The trained model pipeline is saved using Joblib:
+
+```
+models/house_price_model.pkl
+```
+
+This file is used by the CLI tool for predictions.
+
+---
+
+## 📜 requirements.txt
+
+Example:
+
+```
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+joblib
+```
+
+---
+
+## 🧠 Machine Learning Pipeline
+
+The project uses a complete ML pipeline:
+
+1. Data preprocessing
+2. Missing value handling
+3. Encoding categorical features
+4. Scaling numerical features
+5. Model training
+6. Evaluation
+7. Saving pipeline
+
+Implemented using:
+
+* ColumnTransformer
+* Pipeline (sklearn)
+
+---
+
+## 🚧 Future Improvements
+
+* Hyperparameter tuning
+* Web-based interface
+* More datasets
+* Deep learning model
+* Deployment using Flask/FastAPI
+* Cloud hosting
+
+---
+
+## 🤝 Contribution
+
+Contributions are welcome!
+
+Steps:
+
+1. Fork the repo
+2. Create a branch
+3. Commit changes
+4. Open a Pull Request
+
+---
+
+## 👤 Author
+
+**Eman Aslam**
+Machine Learning Enthusiast
+AI | Data Science | Full Stack
+
+📧 Email: [emanaslam543@gmail.com]
+🔗 LinkedIn: emanaslamkhan
+
+---
+
+## ⭐ Acknowledgements
+
+* Kaggle Community
+* Scikit-learn Documentation
+* Open Source Contributors
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
+
+
