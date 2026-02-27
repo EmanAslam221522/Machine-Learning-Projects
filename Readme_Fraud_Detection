@@ -1,0 +1,119 @@
+
+# Fraud Detection Using Machine Learning
+
+## Overview
+
+This project implements a **fraud detection system** using machine learning on a **financial transactions dataset**.
+Fraud detection is a classic **imbalanced classification problem**, where fraudulent transactions are very rare compared to normal ones.
+
+We use:
+
+* Stratified train-test split
+* Class balancing techniques (resampling / class weights)
+* PR Curve and PR-AUC as the main evaluation metrics
+
+---
+
+## Dataset
+
+* Source: Kaggle – [Fraud Detection Dataset](https://www.kaggle.com/datasets/amanali/fraud-detection)
+* Size: 6.3 million records
+* Columns:
+
+| Column         | Description                                                    |
+| -------------- | -------------------------------------------------------------- |
+| step           | Time step of transaction                                       |
+| type           | Transaction type (CASH_IN, CASH_OUT, DEBIT, PAYMENT, TRANSFER) |
+| amount         | Transaction amount                                             |
+| nameOrig       | Source account ID                                              |
+| oldbalanceOrg  | Old balance of source account                                  |
+| newbalanceOrig | New balance of source account                                  |
+| nameDest       | Target account ID                                              |
+| oldbalanceDest | Old balance of target account                                  |
+| newbalanceDest | New balance of target account                                  |
+| isFraud        | Target (1 = fraud, 0 = not fraud)                              |
+
+---
+
+## Approach
+
+1. **Data Preprocessing**
+
+   * Remove irrelevant columns
+   * Encode categorical variables
+   * Handle missing values if any
+
+2. **Split Data**
+
+   * Stratified split to maintain fraud ratio in train and test
+
+3. **Model Training**
+
+   * Random Forest / XGBoost / Logistic Regression
+   * Use `class_weight='balanced'` for imbalanced data
+
+4. **Prediction**
+
+   ```python
+   y_probs = model.predict_proba(X_test)[:,1]
+   ```
+
+   * Gets probability of each transaction being fraud
+
+5. **Evaluation**
+
+   ```python
+   from sklearn.metrics import precision_recall_curve, average_precision_score
+
+   precision, recall, thresholds = precision_recall_curve(y_test, y_probs)
+   pr_auc = average_precision_score(y_test, y_probs)
+   print("PR-AUC Score:", pr_auc)
+   ```
+
+   * PR Curve shows trade-off between **precision and recall**
+   * PR-AUC gives a **single metric** to summarize model performance on rare fraud class
+
+6. **Threshold Selection**
+
+   * Choose a threshold that balances **catching frauds** and **avoiding false alarms**
+
+---
+
+## Why PR-AUC is used
+
+* Fraud transactions are **very rare** → normal accuracy can be misleading.
+* PR-AUC focuses on **positive class (fraud)** performance.
+* High PR-AUC → model can detect fraud **without too many false positives**.
+
+---
+
+## Results
+
+* Example PR-AUC Score: `0.82` → good performance in detecting fraud.
+* Threshold can be adjusted based on business requirement.
+
+---
+
+## How to Use
+
+1. Clone the repo
+2. Install requirements:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Run Jupyter Notebook `fraud_detection.ipynb`
+4. Train model and evaluate using PR-AUC
+
+---
+
+## Notes
+
+* This project is suitable for **imbalanced classification problems**.
+* Can be extended with:
+
+  * Feature engineering
+  * Advanced sampling techniques (SMOTE, ADASYN)
+  * Other models (LightGBM, CatBoost)
+
