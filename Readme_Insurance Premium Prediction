@@ -1,0 +1,209 @@
+
+
+# 🏥 Insurance Premium Prediction (Regression Project)
+
+## 📌 Project Overview
+
+This project builds a **machine learning regression system** to predict **insurance premiums** based on customer information such as age, BMI, smoking status, region, and number of dependents.
+
+The main goal is not only to predict premiums accurately, but also to **analyze model performance across different customer segments** (age groups and BMI categories) to ensure fairness and reliability.
+
+---
+
+## 🎯 Objectives
+
+* Predict insurance premiums using regression models
+* Engineer meaningful features such as **age bands** and **BMI bands**
+* Compare a **baseline model** with a **boosting model**
+* Perform **segment-wise error analysis**
+* Report **Mean Absolute Error (MAE)** for different customer groups
+
+---
+
+## 📂 Dataset Description
+
+A synthetic insurance-style dataset is used with the following features:
+
+### Input Features
+
+| Feature      | Description                          |
+| ------------ | ------------------------------------ |
+| `age`        | Age of the customer                  |
+| `BMI`        | Body Mass Index                      |
+| `smoker`     | Whether the customer smokes (Yes/No) |
+| `dependents` | Number of dependents                 |
+| `region`     | Residential region                   |
+| `age_band`   | Age category (engineered)            |
+| `bmi_band`   | BMI category (engineered)            |
+
+### Target Variable
+
+| Feature             | Description                    |
+| ------------------- | ------------------------------ |
+| `insurance_premium` | Insurance cost to be predicted |
+
+---
+
+## 🛠 Feature Engineering
+
+### 1️⃣ Age Bands
+
+Customers are grouped into age categories:
+
+* 18–25
+* 26–35
+* 36–45
+* 46–55
+* 56–65
+
+This helps the model learn age-related pricing patterns.
+
+---
+
+### 2️⃣ BMI Bands
+
+BMI values are categorized into:
+
+* Underweight
+* Normal
+* Overweight
+* Obese
+
+This captures health-risk related cost differences.
+
+---
+
+## ⚙️ Data Preprocessing
+
+* One-Hot Encoding applied to categorical features:
+
+  * `smoker`
+  * `region`
+  * `age_band`
+  * `bmi_band`
+* Dataset split into **training** and **testing** sets
+* Target variable separated before training
+
+---
+
+## 🤖 Models Used
+
+### 🔹 Baseline Model
+
+**Linear Regression**
+
+* Simple and interpretable
+* Used as a benchmark
+
+### 🔹 Advanced Model
+
+**Gradient Boosting Regressor**
+
+* Ensemble learning method
+* Captures non-linear relationships
+* Provides better accuracy
+
+---
+
+## 📏 Evaluation Metric
+
+### Mean Absolute Error (MAE)
+
+MAE measures the **average absolute difference** between predicted and actual premiums.
+
+[
+MAE = \frac{1}{n} \sum |y_{true} - y_{pred}|
+]
+
+Lower MAE means better performance.
+
+---
+
+## 📊 Segment-Wise Error Analysis
+
+To check model fairness and consistency, MAE is calculated for different customer segments.
+
+---
+
+### 🔹 MAE by Age Band
+
+| Age Band | MAE   |
+| -------- | ----- |
+| 18–25    | 82.72 |
+| 26–35    | 91.26 |
+| 36–45    | 82.52 |
+| 46–55    | 92.65 |
+| 56–65    | 99.16 |
+
+**Observation:**
+
+* Model performs best for young and middle-aged customers
+* Higher error for older customers (56–65)
+
+---
+
+### 🔹 MAE by BMI Band
+
+| BMI Band    | MAE   |
+| ----------- | ----- |
+| Underweight | 89.52 |
+| Normal      | 99.27 |
+| Overweight  | 89.71 |
+| Obese       | 79.12 |
+
+**Observation:**
+
+* Best performance for obese customers
+* Normal BMI group shows higher prediction error
+
+---
+
+## ✅ Key Findings
+
+* Boosting model outperforms baseline regression
+* Feature engineering improves predictive power
+* Model performance varies across customer segments
+* Segment analysis helps detect weak areas for improvement
+
+---
+
+## 📌 Why This Project Matters
+
+* Demonstrates **real-world insurance pricing logic**
+* Shows **ethical ML practices** through fairness analysis
+* Combines **business understanding** with ML modeling
+* Suitable for **academic projects**, **portfolios**, and **interviews**
+
+---
+
+## 📦 Technologies Used
+
+* Python
+* Pandas
+* NumPy
+* Scikit-Learn
+* Jupyter / Kaggle Notebook
+
+---
+
+## 🚀 Future Improvements
+
+* Add more health-related features
+* Use XGBoost or LightGBM
+* Perform hyperparameter tuning
+* Add confidence intervals for predictions
+
+---
+
+## 👤 Author
+
+**Eman Aslam**
+Machine Learning  Student
+
+---
+
+## ⭐ Final Note
+
+This project focuses not only on prediction accuracy but also on **model interpretability and fairness**, which are critical in real-world insurance applications.
+
+
