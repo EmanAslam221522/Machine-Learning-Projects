@@ -1,0 +1,148 @@
+
+# ✅ Project 7 — Spam Email Classifier README
+
+
+
+This project is a **spam detection system** built using **TF-IDF vectorization** and a **linear classifier (Logistic Regression)**. The goal is to classify emails or messages as **Spam** or **Not Spam**, and provide **explainability** via top spam-indicative words.
+
+---
+
+## Project Overview
+
+- **Input:** Text messages or emails  
+- **Output:** Spam / Not Spam prediction  
+- **Use Case:** Email filtering, SMS spam detection, social media monitoring, and any text-based classification system.
+
+---
+
+## Dataset
+
+- Synthetic but realistic dataset of **50 labeled text messages**  
+- Labels: `1 = Spam`, `0 = Not Spam`  
+- Examples include marketing, prize announcements, and normal communication.  
+
+---
+
+## Model
+
+- **TF-IDF Vectorizer**  
+  - Converts raw text into numerical features  
+  - Removes English stop words  
+  - Uses top 3000 features  
+- **Logistic Regression classifier**  
+  - Linear model for text classification  
+  - Handles small dataset efficiently
+
+---
+
+## Training & Evaluation
+
+- **Train/Test Split:** 80% train, 20% test  
+- **Evaluation Metric:** F1 Score (balance between precision & recall)  
+
+Example result on test set:
+
+```
+
+F1 Score: 0.83
+
+```
+
+---
+
+## Explainability — Top Spam Words
+
+The model identifies spam using **words strongly associated with spam/promotions**.  
+
+Top 15 spam-indicative words found by the model:
+
+```
+
+['win', 'free', 'offer', 'prize', 'limited', 'cash', 'claim', 'exclusive', 'bonus', 'urgent', 'selected', 'reward', 'deal', 'click', 'trial']
+
+````
+
+These words are visualized in `reports/figures/top_spam_words.png`.
+
+---
+
+## Example Predictions
+
+```bash
+Input: "Win cash prizes now"
+Output: Spam
+
+Input: "Can we reschedule the meeting?"
+Output: Not Spam
+
+Input: "Limited time offer just for you"
+Output: Spam
+
+Input: "Lunch at 12 pm tomorrow?"
+Output: Not Spam
+````
+
+---
+
+## Key Insights
+
+1. Linear models like Logistic Regression are **highly interpretable** when paired with TF-IDF.
+2. Words like `"win"`, `"free"`, `"cash"`, `"offer"` are **strong indicators of spam**.
+3. Even a **small synthetic dataset** can train a basic spam classifier effectively.
+
+---
+
+## Folder Structure
+
+```
+project-07-spam-classifier/
+│
+├── data/                  # Dataset (synthetic in this case)
+├── notebooks/             # Optional exploratory notebooks
+├── src/
+│   ├── train.py           # Training script
+│   ├── predict.py         # CLI prediction script
+│   └── utils.py           # Helper functions
+├── models/
+│   ├── spam_pipeline.joblib  # Saved pipeline
+│   └── metrics.json           # F1 Score and evaluation metrics
+├── reports/
+│   └── figures/
+│       └── top_spam_words.png # Explainability chart
+└── README.md
+```
+
+---
+
+## How to Run
+
+1. **Train model:**
+
+```bash
+python -m src.train
+```
+
+2. **Predict new emails:**
+
+```bash
+python -m src.predict \
+  --model_path models/spam_pipeline.joblib \
+  --text "Congratulations, you have won a free voucher"
+```
+
+---
+
+## Artifacts
+
+* `models/spam_pipeline.joblib` — Trained pipeline
+* `models/metrics.json` — F1 Score metrics
+* `reports/figures/top_spam_words.png` — Explainability chart
+
+---
+
+## License
+
+This project is open-source and can be used for learning and demonstration purposes.
+
+
+```
