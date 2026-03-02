@@ -1,0 +1,290 @@
+
+# 📊 Customer Churn Prediction System
+
+This project builds an end-to-end machine learning system to predict customer churn using tabular business data.  
+It compares a baseline model with an advanced tree-based model and explains predictions using permutation importance.
+
+The goal is to help businesses identify high-risk customers and design effective retention strategies.
+
+---
+
+## 🚀 Project Objectives
+
+- Handle both numerical and categorical features
+- Build a baseline Logistic Regression model
+- Train an improved Random Forest model
+- Evaluate performance using F1-score
+- Explain predictions using permutation importance
+- Generate business-friendly reports
+
+---
+
+## 📁 Project Structure
+
+```
+
+project-03-customer-churn/
+│
+├── models/
+│   ├── logreg_model.joblib
+│   ├── rf_model.joblib
+│   └── test_split.joblib
+│
+├── reports/
+│   ├── figures/
+│   │   └── churn_drivers.png
+│   ├── metrics.json
+│   └── top_churn_drivers.csv
+│
+├── notebook.ipynb
+├── requirements.txt
+└── README.md
+
+```
+
+---
+
+## 📊 Dataset
+
+A synthetic telecom customer dataset is generated with realistic patterns.
+
+### Features
+
+| Feature Name       | Type        | Description                          |
+|--------------------|-------------|--------------------------------------|
+| tenure_months      | Numerical   | Months customer stayed               |
+| monthly_charges    | Numerical   | Monthly billing amount               |
+| contract_type      | Categorical | Contract duration type               |
+| internet_service   | Categorical | Type of internet service             |
+| payment_method     | Categorical | Customer payment method              |
+
+### Target Variable
+
+| Column | Meaning              |
+|--------|----------------------|
+| churn  | 1 = Left, 0 = Stayed |
+
+Churn probabilities are generated based on:
+- Contract type
+- Monthly charges
+- Customer tenure
+
+This makes the dataset realistic and suitable for modeling.
+
+---
+
+## 🛠️ Technologies Used
+
+- Python 3.x
+- NumPy
+- Pandas
+- Scikit-learn
+- Matplotlib
+- Joblib
+
+---
+
+## ⚙️ Machine Learning Pipeline
+
+The system uses Scikit-learn Pipelines to ensure clean and reproducible workflows.
+
+### Preprocessing
+
+- Numerical Features → StandardScaler
+- Categorical Features → OneHotEncoder
+- Combined using ColumnTransformer
+
+### Models
+
+1. Logistic Regression (Baseline)
+2. Random Forest Classifier (Improved Model)
+
+### Evaluation Metric
+
+- F1-score (chosen due to class imbalance in churn data)
+
+---
+
+## 📈 Model Training
+
+The dataset is split into:
+
+- 80% Training
+- 20% Testing
+
+Stratified sampling is used to preserve churn ratio.
+
+Both models are trained using the same preprocessing pipeline.
+
+---
+
+## 📊 Model Performance
+
+Performance is stored in:
+
+```
+
+reports/metrics.json
+
+````
+
+Example:
+
+```json
+{
+  "logreg_f1": 0.72,
+  "rf_f1": 0.81
+}
+````
+
+Random Forest consistently outperforms Logistic Regression due to its ability to model non-linear patterns.
+
+---
+
+## 🔍 Explainability: Permutation Importance
+
+Permutation importance is used to measure how each feature impacts model performance.
+
+Process:
+
+1. Shuffle one feature
+2. Measure drop in F1-score
+3. Larger drop = higher importance
+
+This method is model-agnostic and reliable.
+
+---
+
+## ⭐ Key Churn Drivers
+
+Top drivers are stored in:
+
+```
+reports/top_churn_drivers.csv
+```
+
+And visualized in:
+
+```
+reports/figures/churn_drivers.png
+```
+
+Typical top features:
+
+1. Month-to-month contracts
+2. High monthly charges
+3. Low tenure
+4. Payment method type
+5. Internet service type
+
+---
+
+## 💼 Business Insights
+
+From model explainability, the following insights were identified:
+
+* Customers on short-term contracts are more likely to churn
+* High monthly charges increase churn probability
+* New customers are more vulnerable to leaving
+* Long-term customers are more stable
+
+---
+
+## 📌 Business Recommendations
+
+Based on analysis:
+
+1. Encourage customers to switch to long-term contracts
+2. Offer loyalty discounts to new users
+3. Introduce pricing flexibility for high-bill customers
+4. Improve onboarding for early-stage customers
+
+These actions can reduce churn and increase customer lifetime value.
+
+---
+
+## ▶️ How to Run the Project
+
+### 1. Clone Repository
+
+```bash
+git clone <your-repo-url>
+cd project-03-customer-churn
+```
+
+### 2. Create Virtual Environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Linux / Mac
+.venv\Scripts\activate      # Windows
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run Notebook
+
+Open and run:
+
+```
+notebook.ipynb
+```
+
+or use Kaggle Notebook.
+
+---
+
+## 📦 Generated Artifacts
+
+After running the project:
+
+| File                  | Description                         |
+| --------------------- | ----------------------------------- |
+| churn_drivers.png     | Visualization of important features |
+| metrics.json          | Model performance metrics           |
+| top_churn_drivers.csv | Ranked churn drivers                |
+
+---
+
+## 📄 Results Summary
+
+| Model               | Strength                | Limitation                 |
+| ------------------- | ----------------------- | -------------------------- |
+| Logistic Regression | Simple, interpretable   | Limited to linear patterns |
+| Random Forest       | High accuracy, flexible | Less interpretable         |
+
+Random Forest was selected as the final model.
+
+---
+
+## 🔮 Future Improvements
+
+Possible enhancements:
+
+* Add real-world telecom dataset
+* Deploy using Streamlit
+* Use SHAP for deeper explainability
+* Implement automated retraining
+* Hyperparameter optimization
+
+---
+
+## 👤 Author
+
+**Name:** Eman Aslam
+**Field:** Computer Science / Data Science / Ai
+**Interests:** Machine Learning, Data Analytics, AI Systems
+
+---
+
+## 📜 License
+
+This project is for educational and portfolio purposes.
+Free to use with attribution.
+
+---
+
