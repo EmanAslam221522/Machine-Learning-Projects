@@ -1,0 +1,140 @@
+
+# Project 10 — Resume Screening Model (Multi-class NLP)
+
+This project demonstrates a **resume classification system** using natural language processing (NLP). It assigns resumes to job categories based on the text content of the resume.
+
+⚠️ **Important**: This project is **for educational purposes only** and **should not be used for real hiring decisions**.
+
+---
+
+## **Model**
+
+* **Vectorization:** TF-IDF (`TfidfVectorizer`)
+  Converts raw resume text into numerical features based on word importance.
+* **Classifier:** Logistic Regression (multi-class)
+  Linear model that predicts one of multiple job categories.
+
+---
+
+## **Job Categories**
+
+* Software Engineer
+* Data Scientist
+* Product Manager
+* Marketing
+
+These are **synthetic categories** for learning purposes and **avoid sensitive real-world hiring data**.
+
+---
+
+## **Dataset**
+
+The dataset consists of **synthetic resume text snippets** and their associated job categories:
+
+| Resume Snippet                                       | Category          |
+| ---------------------------------------------------- | ----------------- |
+| Built scalable APIs using Python and Docker          | Software Engineer |
+| Developed machine learning models for customer churn | Data Scientist    |
+| Led product roadmap and cross-functional teams       | Product Manager   |
+| Designed marketing campaigns and growth strategies   | Marketing         |
+
+The dataset is small for demonstration but shows how a resume can be represented as text and classified.
+
+---
+
+## **Workflow**
+
+1. **Data Preparation**
+
+   * Split the dataset into training and validation sets (75% train, 25% validation).
+   * Stratified splitting ensures all categories appear in both sets.
+
+2. **Feature Extraction**
+
+   * Text is converted into TF-IDF vectors.
+   * Each word’s frequency is weighted by its uniqueness across resumes.
+
+3. **Model Training**
+
+   * Logistic Regression is trained to predict the correct category.
+
+4. **Evaluation**
+
+   * Macro F1 Score is calculated on the validation set to balance performance across categories.
+
+5. **Model Saving**
+
+   * Trained model pipeline is saved to `models/resume_classifier.joblib`.
+   * Metrics are saved to `models/metrics.json`.
+
+---
+
+## **Example Prediction**
+
+```bash
+python -m src.predict \
+  --model_path models/resume_classifier.joblib \
+  --resume_text "Experienced in SQL, machine learning, and data analysis"
+```
+
+**Output:**
+
+```
+Predicted category: data_scientist
+```
+
+---
+
+## **Responsible Use & Ethics** ⚠️
+
+**Limitations:**
+
+* Trained on **synthetic data**, not real hiring outcomes.
+* **Text-only analysis** ignores context, experience depth, and other qualifications.
+* May **reflect biases** in the training data.
+
+**Responsible Use Guidelines:**
+
+* **Do NOT** use for automated hiring or rejection.
+* Use **only as a supporting signal**, combined with human review.
+* Regularly **audit for bias** and unintended discrimination.
+* Always ensure **transparency** and **human oversight** when applying AI in HR contexts.
+
+---
+
+## **Key Insights**
+
+* NLP can summarize and classify resumes, but **contextual understanding and fairness are crucial**.
+* Even simple models like TF-IDF + Logistic Regression can demonstrate **text-based classification**.
+* Responsible AI practices are essential in sensitive domains like hiring.
+
+---
+
+## **Artifacts Generated**
+
+| Artifact                          | Description               |
+| --------------------------------- | ------------------------- |
+| `models/resume_classifier.joblib` | Trained model pipeline    |
+| `models/metrics.json`             | Validation macro F1 score |
+
+---
+
+## **How to Run**
+
+1. **Train the model:**
+
+```bash
+python -m src.train
+```
+
+2. **Predict a new resume category:**
+
+```bash
+python -m src.predict \
+  --model_path models/resume_classifier.joblib \
+  --resume_text "Experienced in SQL, machine learning, and data analysis"
+```
+
+3. **Check metrics:**
+   Open `models/metrics.json` to see the macro F1 score.
+
