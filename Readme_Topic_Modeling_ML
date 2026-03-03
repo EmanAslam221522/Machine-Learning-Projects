@@ -1,0 +1,278 @@
+
+# Project 08 — Topic Modeling (Unsupervised NLP)
+
+This project implements an unsupervised Natural Language Processing (NLP) system to automatically discover hidden topics from a collection of text documents using TF-IDF and Non-negative Matrix Factorization (NMF).
+
+The system groups documents based on word patterns without using any labeled data.
+
+---
+
+## 📌 Project Objectives
+
+This project aims to:
+
+- Clean and preprocess raw text data
+- Convert text into numerical vectors using TF-IDF
+- Learn latent topics using NMF or LDA
+- Extract important words for each topic
+- Document discovered topics in a readable format
+- Save trained models for reuse
+- Generate topic reports for analysis
+
+---
+
+## 📁 Project Structure
+
+```
+
+project-08-topic-modeling/
+│
+├── data/               # (Optional) External datasets
+├── notebooks/          # Kaggle / Jupyter notebooks
+├── src/                # Source code
+│   ├── train.py
+│   ├── extract_topics.py
+│   └── utils.py
+│
+├── models/             # Saved models
+├── reports/            # Generated outputs
+│   └── topics.csv
+│
+├── requirements.txt
+└── README.md
+
+````
+
+---
+
+## ⚙️ Technologies Used
+
+- Python 3
+- NumPy
+- Pandas
+- Scikit-learn
+- Joblib
+
+---
+
+## 📦 Installation
+
+Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Linux / Mac
+.venv\Scripts\activate      # Windows
+````
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 📊 Dataset Description
+
+The project uses a simulated multi-topic dataset containing documents related to:
+
+* Technology
+* Finance
+* Health
+* Sports
+
+Example documents:
+
+* "AI models are transforming software development"
+* "Stock markets react to interest rate changes"
+* "Doctors recommend regular health checkups"
+* "Football teams prepare for the championship season"
+
+This dataset mimics real-world mixed-topic text collections.
+
+---
+
+## 🧠 Methodology
+
+### 1. Text Vectorization (TF-IDF)
+
+TF-IDF converts text into numerical features based on word importance.
+
+It assigns higher weight to meaningful and rare words and removes common words like "the", "and", "is".
+
+### 2. Topic Modeling (NMF)
+
+Non-negative Matrix Factorization (NMF) decomposes the TF-IDF matrix into:
+
+* Topic-word matrix
+* Document-topic matrix
+
+This allows the model to discover hidden themes in the dataset.
+
+### 3. Topic Extraction
+
+After training, the model extracts the most important words for each topic and saves them into a CSV file.
+
+---
+
+## 🚀 How to Run the Project
+
+### Step 1 — Train the Topic Model
+
+Run:
+
+```bash
+python -m src.train --model_type nmf --n_topics 4
+```
+
+This will:
+
+* Vectorize documents
+* Train NMF model
+* Save model and vectorizer
+* Store them in `models/`
+
+Output file:
+
+```
+models/nmf_topic_model.joblib
+```
+
+---
+
+### Step 2 — Extract Topics
+
+Run:
+
+```bash
+python -m src.extract_topics --model_path models/nmf_topic_model.joblib
+```
+
+This will:
+
+* Load trained model
+* Extract top words per topic
+* Display topics in console
+* Save them in CSV format
+
+Output file:
+
+```
+reports/topics.csv
+```
+
+---
+
+## 📈 Sample Output (Discovered Topics)
+
+Example output:
+
+| Topic | Top Words                                   |
+| ----- | ------------------------------------------- |
+| 0     | ai, neural, software, cloud, systems        |
+| 1     | finance, stock, market, investment, risk    |
+| 2     | doctor, health, hospital, fitness, exercise |
+| 3     | football, basketball, match, players, team  |
+
+Each topic is interpreted by analyzing its most frequent words.
+
+---
+
+## 🔍 Topic Distribution Example
+
+When testing a document, the model produces topic scores such as:
+
+```
+Topic 0: 0.0000
+Topic 1: 0.0000
+Topic 2: 0.6394
+Topic 3: 0.0000
+```
+
+This means:
+
+* The document belongs strongly to Topic 2
+* It has no meaningful relation to other topics
+
+Due to the small and clean dataset, documents usually belong to one dominant topic.
+
+---
+
+## 📂 Deliverables
+
+After running the project, the following files are generated:
+
+* `models/nmf_topic_model.joblib` — Trained model and vectorizer
+* `reports/topics.csv` — Extracted topic table
+
+These files can be reused for further analysis.
+
+---
+
+## 💡 Key Insights
+
+* Topic modeling works without labeled data
+* TF-IDF improves topic quality
+* NMF produces interpretable topics
+* Dataset quality strongly affects results
+* Small datasets lead to clean but limited topics
+
+---
+
+## 📌 Real-World Applications
+
+This project can be used for:
+
+* Document clustering
+* News article categorization
+* Research paper analysis
+* Content recommendation
+* Customer feedback analysis
+* Knowledge discovery
+
+---
+
+## 🔮 Future Improvements
+
+Possible enhancements include:
+
+* Using larger real-world datasets
+* Applying advanced preprocessing
+* Using BERTopic or LDA
+* Adding document topic prediction script
+* Visualizing topics using pyLDAvis
+
+---
+
+## 📤 GitHub Submission
+
+Initialize repository:
+
+```bash
+git init
+git add .
+git commit -m "Project 08: Topic Modeling with NMF and TF-IDF"
+git branch -M main
+git remote add origin <YOUR_REPO_URL>
+git push -u origin main
+```
+
+---
+
+## 👨‍💻 Author
+
+Name: Eman Aslam
+Project: NLP Portfolio — Topic Modeling
+Purpose: Internship / Learning / Practice
+
+---
+
+## ✅ Conclusion
+
+This project demonstrates how unsupervised learning can automatically discover meaningful topics from text. It highlights the power of combining TF-IDF with NMF for document analysis and information extraction.
+
+Even without labeled data, the system successfully groups similar documents based on semantic patterns.
+
+
+
