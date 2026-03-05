@@ -1,0 +1,116 @@
+# Project 11 — Image Classification (CNN, CIFAR-10)
+
+## Project Overview
+This project demonstrates **image classification using a Convolutional Neural Network (CNN)** trained on the **CIFAR-10 dataset**.  
+The model can classify **10 classes of objects**: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck.
+
+---
+
+## Folder Structure
+
+```
+
+project-11-image-classification/
+├── models/
+│   └── model.h5                # Trained CNN model
+├── reports/
+│   └── figures/
+│       └── sample_predictions.png  # Sample 3x3 prediction grid
+├── src/
+│   ├── train.py                # Training script
+│   └── predict.py              # Prediction script for test images
+├── notebooks/
+│   └── image_classification.ipynb  # Kaggle notebook
+└── README.md
+
+````
+
+---
+
+## CNN Architecture
+- **Input:** 32×32 RGB images  
+- **Conv Layer 1:** 32 filters, 3×3 kernel, ReLU activation  
+- **MaxPooling 1:** 2×2 pool  
+- **Conv Layer 2:** 64 filters, 3×3 kernel, ReLU activation  
+- **MaxPooling 2:** 2×2 pool  
+- **Flatten**  
+- **Dense Layer:** 64 neurons, ReLU activation  
+- **Output Layer:** 10 neurons, Softmax activation  
+- **Optimizer:** Adam  
+- **Loss Function:** Sparse Categorical Crossentropy  
+
+---
+
+## Training Results
+
+| Metric | Value |
+|--------|-------|
+| Training Accuracy | 85% |
+| Validation Accuracy | 68–69% |
+| Test Accuracy | 68% |
+| Train Loss | 0.42 |
+| Test Loss | 1.09 |
+
+- Slight overfitting observed (training acc > test acc)  
+- Model is able to learn meaningful patterns despite being a simple CNN.
+
+---
+
+## Sample Predictions
+
+Below is a **3×3 grid of test images** with predicted vs true labels:
+
+![Predictions](reports/figures/sample_predictions.png)
+
+---
+
+## Using the Model for New Images
+
+To predict a **new image**, use the single-cell script:
+
+```python
+import tensorflow as tf
+from tensorflow.keras.preprocessing import image
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load model
+model = tf.keras.models.load_model("models/model.h5")
+
+# Class names
+class_names = ['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck']
+
+# Load and preprocess image
+img_path = "/path/to/your/image.png"
+img = image.load_img(img_path, target_size=(32,32))
+img_array = image.img_to_array(img) / 255.0
+img_array = np.expand_dims(img_array, axis=0)
+
+# Predict
+pred_class = np.argmax(model.predict(img_array), axis=1)[0]
+pred_label = class_names[pred_class]
+
+# Show image
+plt.imshow(image.load_img(img_path))
+plt.title(f"Predicted: {pred_label}")
+plt.axis('off')
+plt.show()
+````
+
+---
+
+## Key Insights
+
+* Even a **simple CNN** can achieve decent accuracy on CIFAR-10.
+* **Overfitting** can be reduced with **data augmentation**, **dropout**, or **batch normalization**.
+* Visualization of predictions helps to **interpret the model** and include in a portfolio.
+
+---
+
+## References
+
+* CIFAR-10 dataset by Alex Krizhevsky, Vinod Nair, and Geoffrey Hinton
+* TensorFlow / Keras Documentation
+
+
+```
