@@ -1,0 +1,227 @@
+
+# 🐶🐱 Dogs vs Cats Image Classification
+
+## **Project Overview**
+
+This project is focused on building an image classification model to distinguish between **cats and dogs** using **transfer learning**. We leverage the **MobileNetV2** pretrained network as a backbone and fine-tune it for our dataset.
+
+Key highlights:
+
+* Dataset: 25,000 images (12,500 cats + 12,500 dogs).
+* Approach: Transfer Learning (MobileNetV2 pretrained on ImageNet).
+* Tools: Python, TensorFlow, Keras.
+* Output: Trained model capable of predicting new cat/dog images.
+
+---
+
+## **Project Structure**
+
+```
+cats_dogs_project/
+│
+├─ /cats_dogs_raw/        # Raw extracted images from train.zip
+├─ /cats_dogs/            # Organized dataset: separate folders for cats and dogs
+│   ├─ cats/
+│   └─ dogs/
+├─ /test_images/          # Images used for testing model predictions
+├─ cat_dog_transfer.keras  # Saved trained model in native Keras format
+├─ dog_cat_predictions.csv # Predicted labels on test images
+└─ README.md              # Project documentation
+```
+
+---
+
+## **Dataset Preparation**
+
+1. **Extract the dataset**
+   The original dataset comes as a zip file (`train.zip`).
+
+   ```python
+   import zipfile
+   zip_path = "/kaggle/input/competitions/dogs-vs-cats-redux-kernels-edition/train.zip"
+   with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+       zip_ref.extractall("/kaggle/working/cats_dogs_raw")
+   ```
+
+2. **Organize images into class folders**
+
+   ```python
+   import shutil
+   from pathlib import Path
+
+   cats_dir = Path("/kaggle/working/cats_dogs/cats")
+   dogs_dir = Path("/kaggle/working/cats_dogs/dogs")
+   cats_dir.mkdir(parents=True, exist_ok=True)
+   dogs_dir.mkdir(parents=True, exist_ok=True)
+
+   work_dir = Path("/kaggle/working/cats_dogs_raw/train")
+   for file in work_dir.iterdir():
+       if file.name.startswith("cat"):
+           shutil.copy(file, cats_dir / file.name)
+       elif file.name.startswith("dog"):
+           shutil.copy(file, dogs_dir / file.name)
+   ```
+
+3. **Split dataset for training and validation**
+   Using TensorFlow's `image_dataset_from_directory` with an 80/20 split.
+
+---
+
+## **Model Building**
+
+* **Backbone:** MobileNetV2 (pretrained on ImageNet, offline weights).
+* **Classifier head:**
+
+  * GlobalAveragePooling2D
+  * Dense layer (128 units, ReLU)
+  * Dense output (1 unit, sigmoid for binary classification)
+
+```python
+import tensorflow as tf
+
+base_model = tf.keras.applications.MobileNetV2(
+    input_shape=(160,160,3),
+    include_top=False,
+    weights="/kaggle/input/datasets/me221522/mobilnet/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_160_no_top.h5"
+)
+base_model.trainable = False
+
+inputs = tf.keras.Input(shape=(160,160,3))
+x = tf.keras.applications.mobilenet_v2.preprocess_input(inputs)
+x = base_model(x, training=False)
+x = tf.keras.layers.GlobalAveragePooling2D()(x)
+x = tf.keras.layers.Dense(128, activation="relu")(x)
+outputs = tf.keras.layers.Dense(1, activation="sigmoid")(x)
+
+model = tf.keras.Model(inputs, outputs)
+model.compile(optimizer=tf.keras.optimizers.Adam(1e-3),
+              loss="binary_crossentropy",
+              metrics=["accuracy"])
+```
+
+---
+
+## **Training**
+
+1. **Train classifier head first**
+
+   * 5 epochs, learning rate = 0.001
+
+2. **Fine-tune top layers of MobileNetV2**
+
+   * Unfreeze last 50 layers, learning rate = 0.00001
+   * 5 epochs
+
+**Training & Validation Accuracy Plot:**
+
+```python
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(6,4))
+plt.plot(history.history['accuracy'], label='train_acc')
+plt.plot(history.history['val_accuracy'], label='val_acc')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.title('Training Curve')
+plt.show()
+```
+
+**Results:**
+
+* **Training accuracy:** ~99%
+* **Validation accuracy:** ~98%
+
+---
+
+## **Saving the Model**
+
+Saved in **native Keras format** to avoid HDF5 legacy issues:
+
+```python
+model.save("/kaggle/working/cat_dog_transfer.keras")
+```
+
+* Can be loaded later with:
+
+```python
+model = tf.keras.models.load_model("/kaggle/working/cat_dog_transfer.keras")
+```
+
+---
+
+## **Testing / Predictions**
+
+1. Copy or add test images:
+
+```python
+from pathlib import Path
+import shutil
+
+test_img_path = Path("/kaggle/working/test_image.jpg")
+shutil.copy("/kaggle/working/cats_dogs/cats/cat.0.jpg", test_img_path)
+```
+
+2. Load and predict:
+
+```python
+from tensorflow.keras.preprocessing import image
+import numpy as np
+
+img = image.load_img(test_img_path, target_size=(160, 160))
+img_array = image.img_to_array(img)
+img_array = np.expand_dims(img_array, axis=0)
+img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+
+pred = model.predict(img_array)
+label = "Dog" if pred[0][0] > 0.5 else "Cat"
+print(f"Prediction: {label} ({pred[0][0]:.2f})")
+```
+
+3. **Predict multiple test images** and save results to CSV:
+
+```python
+import pandas as pd
+
+results = []
+for img_path in Path("/kaggle/working/test_images").iterdir():
+    img = image.load_img(img_path, target_size=(160,160))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+    pred = model.predict(img_array)
+    label = "dog" if pred[0][0] > 0.5 else "cat"
+    results.append({"filename": img_path.name, "prediction": label, "prob": float(pred[0][0])})
+
+df = pd.DataFrame(results)
+df.to_csv("/kaggle/working/dog_cat_predictions.csv", index=False)
+```
+
+---
+
+## **Conclusion**
+
+* The model achieves **high accuracy** (~98%) using **transfer learning**.
+* MobileNetV2 is lightweight and suitable for deployment on edge devices.
+* Predictions on new images are **fast and reliable**.
+* Saved CSV allows easy evaluation or Kaggle submission.
+
+---
+
+## **Future Improvements**
+
+1. Use **data augmentation** to improve robustness.
+2. Try **other pretrained backbones** like EfficientNet or ResNet50.
+3. Implement **real-time webcam prediction**.
+4. Deploy as a **web app** using Streamlit or Flask.
+
+---
+
+## **References**
+
+* [TensorFlow Image Classification Guide](https://www.tensorflow.org/tutorials/images/classification)
+* [MobileNetV2 Paper](https://arxiv.org/abs/1801.04381)
+* Kaggle: [Dogs vs Cats Redux](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition)
+
+
+Do you want me to do that next?
