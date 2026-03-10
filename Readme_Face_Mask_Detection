@@ -1,0 +1,179 @@
+
+
+# **Project 13 — Face Mask Detection**
+
+## **Overview**
+
+Face Mask Detection is a **binary image classification system** designed to detect whether a person is wearing a face mask or not.
+This project uses **deep learning**, **transfer learning**, and **data augmentation** techniques to achieve high accuracy on real-world images.
+
+The system can be used for:
+
+* Public safety monitoring
+* Automated entry systems
+* Health compliance tracking
+
+**Goal:**
+Build a robust, real-time, and accurate face mask detector using **MobileNetV2** and **TensorFlow**.
+
+---
+
+## **Dataset**
+
+* **Source:** [Kaggle — Omkargurav Face Mask Dataset](https://www.kaggle.com/datasets/omkargurav/face-mask-dataset)
+* **Classes:**
+
+  * `with_mask`
+  * `without_mask`
+* **Structure:**
+
+```
+data/
+├── with_mask/
+├── without_mask/
+```
+
+* **Total Images:** ~3800 images
+* **Split:** 80% training, 20% validation
+
+**Dataset Visualization Example:**
+
+![Dataset Preview](reports/figures/dataset_preview.png)
+
+> Visualizing the dataset ensures correct labels and image formats.
+
+---
+
+## **Project Architecture**
+
+### **1. Base Model**
+
+* **MobileNetV2**, pretrained on **ImageNet**
+* Used as a **feature extractor**
+
+### **2. Data Augmentation**
+
+To improve model robustness:
+
+* Random horizontal flip
+* Random rotation (±10%)
+* Random zoom (±10%)
+
+This ensures the model generalizes to different angles, face sizes, and lighting conditions.
+
+### **3. Classifier Head**
+
+* `GlobalAveragePooling2D()`
+* `Dense(128, activation='relu')`
+* `Dense(1, activation='sigmoid')` → outputs probability of **Mask / No Mask**
+
+**Model Pipeline:**
+
+```
+Input Image → Data Augmentation → MobileNetV2 → GAP → Dense → Sigmoid → Prediction
+```
+
+### **4. Fine-Tuning**
+
+* Initial training: classifier head only
+* Fine-tuning: unfreeze last 50–100 layers of MobileNetV2
+* Improves accuracy on real-world images
+
+---
+
+## **Training Details**
+
+| Parameter             | Value                      |
+| --------------------- | -------------------------- |
+| Optimizer             | Adam                       |
+| Initial Learning Rate | 0.001                      |
+| Fine-Tuning LR        | 0.00001                    |
+| Loss Function         | Binary Crossentropy        |
+| Epochs                | 10 initial + 5 fine-tuning |
+| Batch Size            | 32                         |
+| Hardware              | Kaggle GPU                 |
+
+**Training Steps:**
+
+1. Load dataset with 80/20 split
+2. Apply **data augmentation** on training set
+3. Train classifier head using **transfer learning**
+4. Unfreeze last layers → **fine-tune** with small learning rate
+5. Evaluate on validation set
+
+---
+
+## **Performance Metrics**
+
+* **Validation Accuracy:** ~95–98%
+* **Loss:** Decreasing consistently across epochs
+* **Observations:** Model predicts both classes correctly with high confidence
+
+**Accuracy & Loss Graphs:**
+
+![Training Accuracy](reports/figures/accuracy.png)
+![Training Loss](reports/figures/loss.png)
+
+---
+
+## **Inference Demo**
+
+The model was tested on validation images and shows predictions with **confidence scores**:
+
+![Inference Demo](reports/figures/inference_demo.png)
+
+**Example Predictions:**
+
+| Image            | Prediction | Confidence |
+| ---------------- | ---------- | ---------- |
+| Person with Mask | Mask       | 0.97       |
+| Person No Mask   | No Mask    | 0.95       |
+| Person with Mask | Mask       | 0.92       |
+| Person No Mask   | No Mask    | 0.96       |
+
+> Screenshots of predictions are included in `reports/figures`.
+
+---
+
+## **Key Insights**
+
+1. **Transfer Learning:** Fast and effective for small datasets.
+2. **Fine-Tuning:** Improves accuracy by adapting pretrained weights to mask detection.
+3. **Data Augmentation:** Essential for robustness against varying angles, lighting, and occlusions.
+4. **MobileNetV2:** Lightweight, fast, and suitable for deployment on edge devices or mobile apps.
+
+---
+
+## **Future Improvements**
+
+* Real-time webcam detection
+* Convert model to **TFLite** for mobile deployment
+* Apply **Grad-CAM** for explainability
+* Collect more data for rare mask types and occlusions
+* Deploy as a **web app** for practical use
+
+---
+
+## **Project Structure**
+
+```
+project-13-face-mask/
+├── data/                  # Dataset
+│   ├── with_mask/
+│   └── without_mask/
+├── models/                # Trained model
+│   └── face_mask_detector.h5
+├── notebooks/             # Kaggle Notebook
+├── reports/figures/       # Training & inference visuals
+├── src/                   # Optional scripts (train.py, predict.py)
+└── README.md              # Project documentation
+```
+
+---
+
+## **References**
+
+1. MobileNetV2 Paper: [https://arxiv.org/abs/1801.04381](https://arxiv.org/abs/1801.04381)
+2. TensorFlow Documentation: [https://www.tensorflow.org/](https://www.tensorflow.org/)
+3. Kaggle Dataset: [Omkargurav Face Mask Dataset](https://www.kaggle.com/datasets/omkargurav/face-mask-dataset)
+
